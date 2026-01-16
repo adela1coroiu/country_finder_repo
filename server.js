@@ -1,3 +1,6 @@
+const HISTORY_KEY = 'search_history';
+
+
 export async function fetchCountryData(countryName) {
     try {
         

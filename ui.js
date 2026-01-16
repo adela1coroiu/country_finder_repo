@@ -56,3 +56,19 @@ export function renderCountryCard(container, data) {
         column3
     );
 }
+
+export function renderSearchHistory(container, history, onBubbleClick) {
+    container.innerHTML = '';
+
+    history.forEach(country => {
+        const bubble = document.createElement('button');
+        bubble.classList.add('history-bubble');
+        bubble.textContent = country;   
+
+        bubble.addEventListener('click', () => {
+            onBubbleClick(country);
+        });
+        
+        container.appendChild(bubble);
+    })
+}

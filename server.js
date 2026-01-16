@@ -27,3 +27,22 @@ export async function fetchCountryData(countryName) {
     }
     
 }
+
+export function getSearchHistory() {
+    const history = localStorage.getItem(HISTORY_KEY);
+    return history ? JSON.parse(history) : [];
+}
+
+export function addToSearchHistory(countryName) {
+    let history = getSearchHistory();
+
+    history = history.filter(name => name.toLowerCase() !== countryName.toLowerCase()); //removes duplicates
+
+    history.unshift(countryName); //adding it to the beginning
+
+    if(history.length > 10) {
+        history.pop();
+    }
+
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}

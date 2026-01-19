@@ -29,6 +29,19 @@ function refreshHistoryUI() {
     });
 }
 
-searchButton.addEventListener('click', () => performSearch(input.value.trim()));
+const handleSearch = () => {
+    const query = input.value.trim();
+    if(query) {
+        performSearch(query);
+    }
+}
+
+searchButton.addEventListener('click', handleSearch);
+
+input.addEventListener('keypress', (event) => {
+    if(event.key === 'Enter') {
+        handleSearch();
+    }
+});
 
 refreshHistoryUI();

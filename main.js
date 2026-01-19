@@ -1,18 +1,44 @@
-import { addToSearchHistory, fetchCountryData, getSearchHistory } from "./server.js";
+import { addToSearchHistory, fetchCountryData, getFavoriteCountries, getSearchHistory, addToFavoriteCountries } from "./server.js";
 import { renderCountryCard, renderSearchHistory } from "./ui.js";
 
 
 const input = document.querySelector('.input-class');
 const searchButton = document.querySelector('.search-button');
 const countryInfo = document.querySelector('.country-info');
-const historyList = document.getElementById('history-list');
+const listContainer = document.getElementById('countries-bubbles-list');
+const favoritesButton = document.getElementById('favorites-button');
+const historyButton = document.getElementById('history-button');
+
+let currentView = 'history';
+
+function refreshListUI() {
+
+    if(currentView === 'history') {
+        const history = getSearchHistory();
+        renderSearchHistory(listContainer, history, (countryName) => {
+            performSearch(countryName);
+        });
+    }
+    else if(currentView === 'favorites') {
+        const favorites = getFavoriteCountries();
+        renderSearchHistory(listContainer, favorites, (countryName) => {
+            performSearch(countryName);
+        });
+    }
+}
 
 async function performSearch(name) {
     try {
         const data = await fetchCountryData(name);
-        renderCountryCard(countryInfo, data);
-        addToSearchHistory(name);
-        refreshHistoryUI();
+
+        const favorites = getFavoriteCountries();
+        const isFavorite = favorites.includes(data.name);
+
+        renderCountryCard(countryInfo, data, isFavorite, (countryName) => {
+            return addToFavoriteCountries(countryName);
+        });
+        addToSearchHistory(data.name);
+        refreshListUI();
     }
     catch {
         console.error(error);
@@ -21,13 +47,15 @@ async function performSearch(name) {
     }
 }
 
-function refreshHistoryUI() {
-    const history = getSearchHistory();
-    renderSearchHistory(historyList, history, (clickedCountryName) => {
-        input.value = clickedCountryName;
-        performSearch(clickedCountryName);
-    });
-}
+favoritesButton.addEventListener('click', () => {
+    currentView = 'favorites';
+    refreshListUI();
+});
+
+historyButton.addEventListener('click', () => {
+    currentView = 'history';
+    refreshListUI();
+});
 
 const handleSearch = () => {
     const query = input.value.trim();
@@ -44,4 +72,4 @@ input.addEventListener('keypress', (event) => {
     }
 });
 
-refreshHistoryUI();
+refreshListUI();

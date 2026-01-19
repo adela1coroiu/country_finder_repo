@@ -23,7 +23,7 @@ export function createMapLink(url) {
     return div;
 }
 
-export function renderCountryCard(container, data) {
+export function renderCountryCard(container, data, isFavorite, onFavoriteClick) {
 
     container.innerHTML = '';
     container.classList.add('show-border');
@@ -50,10 +50,20 @@ export function renderCountryCard(container, data) {
         createMapLink(data.mapUrl)
     );
 
+    const starButton = document.createElement('img');
+    starButton.src = isFavorite ? 'assets/images/star.png' : 'assets/images/un-star.png';
+    starButton.classList.add('star-button');
+
+    starButton.addEventListener('click', () => {
+        const nowFavorite = onFavoriteClick(data.name);
+        starButton.src = nowFavorite ? 'assets/images/star.png' : 'assets/images/un-star.png';
+    });
+
     container.append(
         flagImage,
         column2,
-        column3
+        column3,
+        starButton
     );
 }
 

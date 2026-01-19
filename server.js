@@ -1,5 +1,5 @@
 const HISTORY_KEY = 'search_history';
-
+const FAVORITES_KEY = 'favorite_countries';
 
 export async function fetchCountryData(countryName) {
     try {
@@ -45,4 +45,24 @@ export function addToSearchHistory(countryName) {
     }
 
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}
+
+export function getFavoriteCountries() {
+    const favorites = localStorage.getItem(FAVORITES_KEY);
+    return favorites ? JSON.parse(favorites) : [];
+}
+
+export function addToFavoriteCountries(countryName) {
+    let favorites = getFavoriteCountries();
+
+    const index = favorites.indexOf(countryName);
+    if(index === -1) {
+        favorites.push(countryName);
+    }
+    else {
+        favorites.splice(index, 1);
+    }
+
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    return index === -1;
 }

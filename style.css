@@ -81,7 +81,7 @@ body {
     background-color: rgba(255, 255, 255, 0.8);
     width: fit-content;
     display: flex;
-    padding: 50px 120px;
+    padding: 40px 100px;
 }
 
 .image-flag {
@@ -114,4 +114,58 @@ body {
     background-color: #1e306c;
     color: white;
     transform: translateY(-5px);
+}
+
+.star-button {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-left: 100px;
+    transition: transform 0.2s;
+}
+
+.star-button:hover {
+    transform: scale(1.2);
+}
+
+.favorites-button {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.favorites-button:hover {
+    background-color: #dcdcdc;
+}
+
+.history-button {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.history-button:hover {
+    background-color: #dcdcdc;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
 }

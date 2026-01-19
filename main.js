@@ -1,7 +1,6 @@
 import { addToSearchHistory, fetchCountryData, getFavoriteCountries, getSearchHistory, addToFavoriteCountries } from "./server.js";
 import { renderCountryCard, renderSearchHistory } from "./ui.js";
 
-
 const input = document.querySelector('.input-class');
 const searchButton = document.querySelector('.search-button');
 const countryInfo = document.querySelector('.country-info');

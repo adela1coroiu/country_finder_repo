@@ -2,18 +2,19 @@ body {
     background-image: url(assets/images/background-map.jpg);
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    height: 100vh; 
+    overflow: hidden;
 } 
 
 .title-class {
     font-family: 'Arial Black', sans-serif;
     color: #004581;
     text-align: center;
-    font-size: 50px;
-    margin-top: 100px;
+    font-size: clamp(30px, 8vw, 50px);
     text-shadow: #ffffff 4px 4px 4px;
 }
 
@@ -23,15 +24,20 @@ body {
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 35px; 
-    padding: 5px 10px; 
-    width: fit-content;
+    padding: 5px 15px; 
+    width: 90%; 
+    max-width: 500px; 
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .input-class {
-    text-align: center;
-    font-size: 18px;
-    border-color: transparent;
+    flex-grow: 1; 
+    width: 100%;
+    text-align: left;
+    font-size: 16px; 
+    border: none;
+    outline: none;
 }
 
 .search-button {
@@ -53,8 +59,14 @@ body {
 
 .country-info { 
     margin-top: 20px;
-    padding: 15px;
-    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .info-column {
@@ -62,7 +74,8 @@ body {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    margin-left: 35px;
+    margin-left: 20px; 
+    flex: 1;
 }
 
 .country-info-text {
@@ -79,14 +92,19 @@ body {
     border-radius: 10px;
     border-color: rgb(144, 144, 144);
     background-color: rgba(255, 255, 255, 0.8);
-    width: fit-content;
+    width: 90%; 
+    max-width: 800px;
+    padding: 12px 20px; 
+    max-height: 150px;
     display: flex;
-    padding: 40px 100px;
+    flex-direction: row; 
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .image-flag {
     border-radius: 10px;
-    width: 200px;
+    width: 150px;
     height: auto;
 }
 
@@ -120,7 +138,7 @@ body {
     width: 40px;
     height: 40px;
     cursor: pointer;
-    margin-left: 100px;
+    margin-left: auto;
     transition: transform 0.2s;
 }
 
@@ -170,6 +188,34 @@ body {
 .nav-container {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
     gap: 10px;
+    width: 90%;
+    flex-wrap: wrap; 
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .show-border {
+        flex-direction: column; 
+        align-items: center;
+        text-align: center;
+    }
+
+    .info-column {
+        margin-left: 0; 
+        margin-top: 15px;
+        align-items: center;
+    }
+
+    .star-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        margin-left: 0; 
+    }
+    
+    .image-flag {
+        width: 50%; 
+        max-width: 250px;
+    }
 }

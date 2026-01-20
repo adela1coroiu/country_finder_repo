@@ -11,21 +11,19 @@ export async function fetchCountryData(countryName) {
         }
 
         const data = await response.json();
-        const country = data[0];
 
-        return {
+        return data.map(country => ({
             flag: country.flags.png,
             name: country.name.common,
             capital: country.capital ? country.capital[0] : 'N/A',
             population: country.population.toLocaleString(),
             currencies: country.currencies ? Object.values(country.currencies).map(curr => curr.name).join(', ') : 'N/A',
             mapUrl: country.maps.googleMaps
-        };
+        }));
     }
     catch (error) {
         throw error;
     }
-    
 }
 
 export function getSearchHistory() {

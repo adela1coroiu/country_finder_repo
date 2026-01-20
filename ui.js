@@ -23,10 +23,10 @@ export function createMapLink(url) {
     return div;
 }
 
-export function renderCountryCard(container, data, isFavorite, onFavoriteClick) {
+export function renderSingleCountryCard(data, isFavorite, onFavoriteClick) {
 
-    container.innerHTML = '';
-    container.classList.add('show-border');
+    const card = document.createElement('div');
+    card.classList.add('show-border');
 
     //first column of the card - flag
     const flagImage = document.createElement('img');
@@ -59,12 +59,23 @@ export function renderCountryCard(container, data, isFavorite, onFavoriteClick) 
         starButton.src = nowFavorite ? 'assets/images/star.png' : 'assets/images/un-star.png';
     });
 
-    container.append(
+    card.append(
         flagImage,
         column2,
         column3,
         starButton
     );
+    console.log(card);
+    return card;
+}
+
+export function renderCountryList(container, countriesList, favorites, onFavoriteClick) {
+    container.innerHTML = '';
+    countriesList.forEach(data => {
+        const isFavorite = favorites.includes(data.name);
+        const countryCard = renderSingleCountryCard(data, isFavorite, onFavoriteClick);
+        container.appendChild(countryCard);
+    });
 }
 
 export function renderSearchHistory(container, history, onBubbleClick) {

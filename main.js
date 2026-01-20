@@ -1,5 +1,5 @@
 import { addToSearchHistory, fetchCountryData, getFavoriteCountries, getSearchHistory, addToFavoriteCountries } from "./server.js";
-import { renderCountryCard, renderSearchHistory } from "./ui.js";
+import { renderCountryList, renderSearchHistory, renderSingleCountryCard } from "./ui.js";
 
 const input = document.querySelector('.input-class');
 const searchButton = document.querySelector('.search-button');
@@ -15,35 +15,66 @@ function refreshListUI() {
     if(currentView === 'history') {
         const history = getSearchHistory();
         renderSearchHistory(listContainer, history, (countryName) => {
-            performSearch(countryName);
+            performSearchForSingularCountry(countryName);
         });
     }
     else if(currentView === 'favorites') {
         const favorites = getFavoriteCountries();
         renderSearchHistory(listContainer, favorites, (countryName) => {
-            performSearch(countryName);
+            performSearchForSingularCountry(countryName);
         });
     }
 }
 
-async function performSearch(name) {
+async function performSearchForSingularCountry(name) {
     try {
-        const data = await fetchCountryData(name);
+        const countriesList = await fetchCountryData(name); 
+        const favorites = getFavoriteCountries(); 
+        
+        const exactMatch = countriesList.find(c => c.name.toLowerCase() === name.toLowerCase()) || countriesList[0];
+        console.log(exactMatch);
+        countryInfo.innerHTML = ''; 
+        
+        const card = renderSingleCountryCard(
+            exactMatch, 
+            favorites.includes(exactMatch.name), 
+            (countryName) => addToFavoriteCountries(countryName)
+        );
+        
+        countryInfo.appendChild(card); 
+    } 
+    catch (error) {
+        handleSearchError(error);
+    }
+}
 
-        const favorites = getFavoriteCountries();
-        const isFavorite = favorites.includes(data.name);
+async function performSearchForCountriesThatMatch(name) {
+    if (name.length < 3) {
+        return;
+    } 
 
-        renderCountryCard(countryInfo, data, isFavorite, (countryName) => {
+    try {
+        const countriesList = await fetchCountryData(name); 
+        const favorites = getFavoriteCountries(); 
+
+        renderCountryList(countryInfo, countriesList, favorites, (countryName) => {
             return addToFavoriteCountries(countryName);
         });
-        addToSearchHistory(data.name);
-        refreshListUI();
+        
+        if (countriesList.length > 0) {
+            addToSearchHistory(countriesList[0].name); 
+            refreshListUI(); 
+        }
+    } 
+    catch (error) {
+        handleSearchError(error);
     }
-    catch {
-        console.error(error);
-        countryInfo.classList.remove('show-border');
-        countryInfo.textContent = "Country not found!";
-    }
+}
+
+function handleSearchError(error) {
+    console.error(error);
+    countryInfo.classList.remove('show-border');
+    countryInfo.textContent = "Country not found!";
 }
 
 favoritesButton.addEventListener('click', () => {
@@ -59,7 +90,7 @@ historyButton.addEventListener('click', () => {
 const handleSearch = () => {
     const query = input.value.trim();
     if(query) {
-        performSearch(query);
+        performSearchForCountriesThatMatch(query);
     }
 }
 

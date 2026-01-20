@@ -26,6 +26,29 @@ export async function fetchCountryData(countryName) {
     }
 }
 
+export async function fetchCountriesByRegion(region) {
+    try {
+        const response = await fetch(`https://restcountries.com/v3.1/region/${region}`);
+        
+        if(!response.ok) {
+            throw new Error('Region not found!');
+        }
+        
+        const data = await response.json();
+        return data.map(country => ({
+            flag: country.flags.png,
+            name: country.name.common,
+            capital: country.capital ? country.capital[0] : 'N/A',
+            population: country.population.toLocaleString(),
+            currencies: country.currencies ? Object.values(country.currencies).map(curr => curr.name).join(', ') : 'N/A',
+            mapUrl: country.maps.googleMaps
+        }));
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
 export function getSearchHistory() {
     const history = localStorage.getItem(HISTORY_KEY);
     return history ? JSON.parse(history) : [];

@@ -1,5 +1,5 @@
-import { addToSearchHistory, fetchCountryData, getFavoriteCountries, getSearchHistory, addToFavoriteCountries } from "./server.js";
-import { renderCountryList, renderSearchHistory, renderSingleCountryCard } from "./ui.js";
+import { addToSearchHistory, fetchCountryData, getFavoriteCountries, getSearchHistory, addToFavoriteCountries, fetchCountriesByRegion } from "./server.js";
+import { renderCountryList, renderRegionOptions, renderSearchHistory, renderSingleCountryCard } from "./ui.js";
 
 const input = document.querySelector('.input-class');
 const searchButton = document.querySelector('.search-button');
@@ -7,6 +7,11 @@ const countryInfo = document.querySelector('.country-info');
 const listContainer = document.getElementById('countries-bubbles-list');
 const favoritesButton = document.getElementById('favorites-button');
 const historyButton = document.getElementById('history-button');
+const regionsMenuButton = document.getElementById('menu-regions');
+const menuHomeButton = document.getElementById('menu-home');
+const homeControls = document.getElementById('home-controls');
+const regionsControls = document.getElementById('regions-controls');
+const regionsBubblesList = document.getElementById('regions-bubbles-list');
 
 let currentView = 'history';
 
@@ -86,6 +91,43 @@ historyButton.addEventListener('click', () => {
     currentView = 'history';
     refreshListUI();
 });
+
+menuHomeButton.addEventListener('click', () => {
+    homeControls.classList.remove('hidden');
+    regionsControls.classList.add('hidden');
+    menuHomeButton.classList.add('active');
+    regionsMenuButton.classList.remove('active');
+    countryInfo.innerHTML = '';
+    refreshListUI();
+});
+
+regionsMenuButton.addEventListener('click', () => {
+    homeControls.classList.add('hidden');
+    regionsControls.classList.remove('hidden');
+    regionsMenuButton.classList.add('active');
+    menuHomeButton.classList.remove('active');
+    countryInfo.innerHTML = '';
+    if (regionsBubblesList.innerHTML === '') {
+        renderRegionOptions(regionsBubblesList, (selectedRegion) => {
+            performRegionSearch(selectedRegion);
+        });
+    }
+});
+
+async function performRegionSearch(region) {
+    try {
+        countryInfo.innerHTML = '<p class="country-info-text">Loading countries...</p>';
+        const countriesList = await fetchCountriesByRegion(region);
+        const favorites = getFavoriteCountries();
+
+        renderCountryList(countryInfo, countriesList, favorites, (countryName) => {
+            return addToFavoriteCountries(countryName);
+        });
+    } catch (error) {
+        console.error(error);
+        countryInfo.textContent = "Error loading region.";
+    }
+}
 
 const handleSearch = () => {
     const query = input.value.trim();

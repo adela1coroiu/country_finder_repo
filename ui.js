@@ -23,6 +23,7 @@ export function createMapLink(url) {
     return div;
 }
 
+//function to render a single country card with the necessary details
 export function renderSingleCountryCard(data, isFavorite, onFavoriteClick) {
 
     const card = document.createElement('div');
@@ -78,6 +79,7 @@ export function renderCountryList(container, countriesList, favorites, onFavorit
     });
 }
 
+//functionn to render the search history bubbles
 export function renderSearchHistory(container, history, onBubbleClick) {
     container.innerHTML = '';
 
@@ -92,4 +94,22 @@ export function renderSearchHistory(container, history, onBubbleClick) {
         
         container.appendChild(bubble);
     })
+}
+
+//function to render region bubbles
+export function renderRegionOptions(container, onRegionClick) {
+    container.innerHTML = '';
+    const regions = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania'];
+
+    regions.forEach(region => {
+        const button = document.createElement('button');
+        button.classList.add('history-bubble');
+        button.textContent = region;
+
+        button.addEventListener('click', () => {
+            onRegionClick(region);
+        });
+
+        container.appendChild(button);
+    });
 }

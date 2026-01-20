@@ -7,28 +7,46 @@
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <h1 class="title-class">Country finder</h1>
+    <div class="app-container">
+        <aside class="side-menu">
+            <h2 class="menu-title">Menu</h2>
+            <ul class="menu-list">
+                <li id="menu-home" class="menu-item active">🏠 Home</li>
+                <li id="menu-regions" class="menu-item">🌍 Explore Regions</li>
+                <li id="menu-random" class="menu-item">🎲 Random Country</li>
+                <li id="menu-rankings" class="menu-item">📊 World Rankings</li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <h1 class="title-class">Country finder</h1>
 
-    <div class="search-container">
-        <input class="input-class" placeholder="Enter a country name..."/>
-        <button class="search-button">Search</button> 
-    </div>
+            <div class="search-container">
+                <input class="input-class" placeholder="Enter a country name..."/>
+                <button class="search-button">Search</button> 
+            </div>
 
-    <div class="nav-container">
-        <button id="history-button" class="history-button">
-            History
-            <img src="assets/images/history.png" alt="history" width="20" height="20">
-        </button>
-        <button id="favorites-button" class="favorites-button">
-            Favorites
-            <img src="assets/images/favorites.png" alt="star" width="20" height="20">
-        </button>
+            <div id="home-controls">
+                <div class="nav-container">
+                    <button id="history-button" class="history-button">
+                        History
+                        <img src="assets/images/history.png" alt="history" width="20" height="20">
+                    </button>
+                    <button id="favorites-button" class="favorites-button">
+                        Favorites
+                        <img src="assets/images/favorites.png" alt="star" width="20" height="20">
+                    </button>
+                </div>
+                <div class="history-info" id="countries-bubbles-list"></div>
+            </div>
+
+            <div id="regions-controls" class="hidden">
+                <div class="history-info" id="regions-bubbles-list"></div>
+            </div>
+
+            <div class="country-info"></div>
+        </main>
     </div>
     
-    <div class="history-info" id="countries-bubbles-list"></div>
-
-    <div class="country-info"></div>
-
     <script type="module" src="main.js"></script>
 </body>
 </html>

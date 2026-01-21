@@ -1,5 +1,6 @@
-import { addToSearchHistory, fetchCountryData, getFavoriteCountries, getSearchHistory, addToFavoriteCountries, fetchCountriesByRegion } from "./server.js";
-import { renderCountryList, renderRegionOptions, renderSearchHistory, renderSingleCountryCard } from "./ui.js";
+import { addToSearchHistory, fetchCountryData, getFavoriteCountries, getSearchHistory, addToFavoriteCountries, fetchCountriesByRegion, fetchAllCountriesRanked, fetchDiscoveryCountry, fetchTravelNews } from "./server.js";
+import { renderCountryList, renderRegionOptions, renderSearchHistory, renderSingleCountryCard, renderRankingsList, renderTripSuggestion } from "./ui.js";
+import { switchView } from "./views.js";
 
 const input = document.querySelector('.input-class');
 const searchButton = document.querySelector('.search-button');
@@ -9,43 +10,38 @@ const favoritesButton = document.getElementById('favorites-button');
 const historyButton = document.getElementById('history-button');
 const regionsMenuButton = document.getElementById('menu-regions');
 const menuHomeButton = document.getElementById('menu-home');
-const homeControls = document.getElementById('home-controls');
-const regionsControls = document.getElementById('regions-controls');
 const regionsBubblesList = document.getElementById('regions-bubbles-list');
+const rankingsMenuButton = document.getElementById('menu-rankings');
+const rankingsListContainer = document.getElementById('rankings-list-container');
+const discoveryMenuButton = document.getElementById('menu-discovery');
+const shuffleDiscoveryButton = document.getElementById('shuffle-discovery');
 
 let currentView = 'history';
 
 function refreshListUI() {
-
-    if(currentView === 'history') {
-        const history = getSearchHistory();
-        renderSearchHistory(listContainer, history, (countryName) => {
-            performSearchForSingularCountry(countryName);
-        });
-    }
-    else if(currentView === 'favorites') {
-        const favorites = getFavoriteCountries();
-        renderSearchHistory(listContainer, favorites, (countryName) => {
-            performSearchForSingularCountry(countryName);
-        });
-    }
+    const data = currentView === 'history' ? getSearchHistory() : getFavoriteCountries();
+    renderSearchHistory(listContainer, data, (countryName) => {
+        performSearchForSingularCountry(countryName);
+    })
 }
 
 async function performSearchForSingularCountry(name) {
     try {
         const countriesList = await fetchCountryData(name); 
         const favorites = getFavoriteCountries(); 
-        
         const exactMatch = countriesList.find(c => c.name.toLowerCase() === name.toLowerCase()) || countriesList[0];
-        console.log(exactMatch);
+
         countryInfo.innerHTML = ''; 
         
         const card = renderSingleCountryCard(
             exactMatch, 
             favorites.includes(exactMatch.name), 
-            (countryName) => addToFavoriteCountries(countryName)
+            (countryName) => {
+                const isNowFavorite = addToFavoriteCountries(countryName);
+                refreshListUI();
+                return isNowFavorite;
+            }
         );
-        
         countryInfo.appendChild(card); 
     } 
     catch (error) {
@@ -63,7 +59,9 @@ async function performSearchForCountriesThatMatch(name) {
         const favorites = getFavoriteCountries(); 
 
         renderCountryList(countryInfo, countriesList, favorites, (countryName) => {
-            return addToFavoriteCountries(countryName);
+            const isNowFavorite = addToFavoriteCountries(countryName);
+            refreshListUI();
+            return isNowFavorite;
         });
         
         if (countriesList.length > 0) {
@@ -78,41 +76,8 @@ async function performSearchForCountriesThatMatch(name) {
 
 function handleSearchError(error) {
     console.error(error);
-    countryInfo.classList.remove('show-border');
-    countryInfo.textContent = "Country not found!";
+    countryInfo.innerHTML = '<p class="country-info-text">Country not found!</p>';
 }
-
-favoritesButton.addEventListener('click', () => {
-    currentView = 'favorites';
-    refreshListUI();
-});
-
-historyButton.addEventListener('click', () => {
-    currentView = 'history';
-    refreshListUI();
-});
-
-menuHomeButton.addEventListener('click', () => {
-    homeControls.classList.remove('hidden');
-    regionsControls.classList.add('hidden');
-    menuHomeButton.classList.add('active');
-    regionsMenuButton.classList.remove('active');
-    countryInfo.innerHTML = '';
-    refreshListUI();
-});
-
-regionsMenuButton.addEventListener('click', () => {
-    homeControls.classList.add('hidden');
-    regionsControls.classList.remove('hidden');
-    regionsMenuButton.classList.add('active');
-    menuHomeButton.classList.remove('active');
-    countryInfo.innerHTML = '';
-    if (regionsBubblesList.innerHTML === '') {
-        renderRegionOptions(regionsBubblesList, (selectedRegion) => {
-            performRegionSearch(selectedRegion);
-        });
-    }
-});
 
 async function performRegionSearch(region) {
     try {
@@ -129,6 +94,75 @@ async function performRegionSearch(region) {
     }
 }
 
+async function loadDiscoveryTrip() {
+    countryInfo.innerHTML = '<p class="country-info-text">🌍 Planning your next trip...</p>';
+    
+    try {
+        const country = await fetchDiscoveryCountry();
+        const wikiData = await fetchTravelNews(country.name);
+        
+        countryInfo.innerHTML = '';
+        
+        const favorites = getFavoriteCountries();
+        const card = renderSingleCountryCard(country, favorites.includes(country.name), (name) => {
+            return addToFavoriteCountries(name);
+        });
+        countryInfo.appendChild(card);
+        renderTripSuggestion(countryInfo, country, wikiData);
+    } 
+    catch (error) {
+        countryInfo.textContent = "Could not find a destination right now. Try again!";
+    }
+}
+
+//~~~~~~~~~~~~~~~~~~~Event listeners~~~~~~~~~~~~~~~~~~~
+//home view extra sub-navigation
+favoritesButton.addEventListener('click', () => {
+    currentView = 'favorites';
+    refreshListUI();
+});
+
+historyButton.addEventListener('click', () => {
+    currentView = 'history';
+    refreshListUI();
+});
+
+//~~~~~~~~~~~~~~~~Main sidebar navigation~~~~~~~~~~~~~~~~
+
+menuHomeButton.addEventListener('click', () => {
+    switchView('home-view', menuHomeButton);
+    refreshListUI();
+});
+
+regionsMenuButton.addEventListener('click', () => {
+    switchView('regions-view', regionsMenuButton);
+    if (regionsBubblesList.innerHTML === '') {
+        renderRegionOptions(regionsBubblesList, (selectedRegion) => {
+            performRegionSearch(selectedRegion);
+        });
+    }
+});
+
+rankingsMenuButton.addEventListener('click', async () => {
+    switchView('rankings-view', rankingsMenuButton);
+    rankingsListContainer.innerHTML = '<p class="country-info-text">Calculating rankings...</p>';
+
+    try {
+        const rankings = await fetchAllCountriesRanked();
+        renderRankingsList(rankingsListContainer, rankings);
+    } catch (error) {
+        console.error(error);
+        rankingsListContainer.textContent = "Error loading rankings.";
+    }
+});
+
+discoveryMenuButton.addEventListener('click', () => {
+    switchView('discovery-view', discoveryMenuButton);
+    loadDiscoveryTrip();
+})
+
+//search logic
+
 const handleSearch = () => {
     const query = input.value.trim();
     if(query) {
@@ -138,10 +172,14 @@ const handleSearch = () => {
 
 searchButton.addEventListener('click', handleSearch);
 
+//event listener for on enter search
 input.addEventListener('keypress', (event) => {
     if(event.key === 'Enter') {
         handleSearch();
     }
 });
 
+shuffleDiscoveryButton.addEventListener('click', loadDiscoveryTrip);
+
+//initializing the ui
 refreshListUI();

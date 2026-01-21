@@ -8,39 +8,67 @@
 </head>
 <body>
     <div class="app-container">
+
+        <!-- Side menu with navigation items-->
         <aside class="side-menu">
             <h2 class="menu-title">Menu</h2>
             <ul class="menu-list">
                 <li id="menu-home" class="menu-item active">🏠 Home</li>
-                <li id="menu-regions" class="menu-item">🌍 Explore Regions</li>
-                <li id="menu-random" class="menu-item">🎲 Random Country</li>
-                <li id="menu-rankings" class="menu-item">📊 World Rankings</li>
+                <li id="menu-regions" class="menu-item">🌍 Explore regions</li>
+                <li id="menu-discovery" class="menu-item">✈️ Travel discovery</li>
+                <li id="menu-rankings" class="menu-item">📊 World rankings</li>
             </ul>
         </aside>
+
+        <!-- Main content area that changes based on menu selection -->
         <main class="main-content">
-            <h1 class="title-class">Country finder</h1>
-
-            <div class="search-container">
-                <input class="input-class" placeholder="Enter a country name..."/>
-                <button class="search-button">Search</button> 
-            </div>
-
-            <div id="home-controls">
-                <div class="nav-container">
-                    <button id="history-button" class="history-button">
-                        History
-                        <img src="assets/images/history.png" alt="history" width="20" height="20">
-                    </button>
-                    <button id="favorites-button" class="favorites-button">
-                        Favorites
-                        <img src="assets/images/favorites.png" alt="star" width="20" height="20">
-                    </button>
+            <div id="home-view" class="view-container">
+                <h1 class="title-class">Country finder</h1>
+                
+                <!--Search bar and search button section-->
+                <div class="search-container">
+                    <input class="input-class" placeholder="Enter a country name..."/>
+                    <button class="search-button">Search</button> 
                 </div>
-                <div class="history-info" id="countries-bubbles-list"></div>
+
+                <!--Navigation bar between Favorite countries and History of most recent searches-->
+                <div id="home-controls">
+                    <div class="nav-container">
+                        <!--History bubble-->
+                        <button id="history-button" class="history-button">
+                            History
+                            <img src="assets/images/history.png" alt="history" width="20" height="20">
+                        </button>
+                        <!--Favorites bubble-->
+                        <button id="favorites-button" class="favorites-button">
+                            Favorites
+                            <img src="assets/images/favorites.png" alt="star" width="20" height="20">
+                        </button>
+                    </div>
+                    <div class="history-info" id="countries-bubbles-list"></div>
+                </div>
             </div>
 
-            <div id="regions-controls" class="hidden">
+            <!--Explore regions page from side menu - touchable bubbles with all the regions-->
+            <div id="regions-view" class="view-container hidden">
+                <h1 class="title-class">Countries by region</h1>
                 <div class="history-info" id="regions-bubbles-list"></div>
+            </div>
+
+            <!--Discover trip page from side menu - button to randomize a new search-->
+            <div id="discovery-view" class="view-container hidden">
+                <div class="discovery-header">
+                    <h1 class="title-class">Plan your next trip</h1>
+                    <button id="shuffle-discovery" class="search-button">🎲 New Suggestion</button>
+                </div>
+            </div>
+
+            <!--World rankings page from side menu - list with top 10 countries-->
+            <div id="rankings-view" class="view-container hidden">
+                <h1 class="title-class">World population rankings</h1>
+                <div class="rankings-container">
+                    <div id="rankings-list-container"></div>
+                </div>
             </div>
 
             <div class="country-info"></div>

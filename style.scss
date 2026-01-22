@@ -1,0 +1,419 @@
+//@import 'variables';
+@use "sass:color";
+@use "variables" as *;
+
+//reusable mixin for buttons
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin nav-pill-button {
+    display: flex;
+    align-items: center;
+    background-color: $light-gray;
+    border: 1px solid $border-gray;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: all $transition-normal ease;
+
+    &:hover {
+        background-color: color.adjust($light-gray, $lightness: -10%);
+        transform: translateY(-5px);
+    }
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url(assets/images/background-map.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    @include flex-center;
+    height: 100vh; 
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+} 
+
+.hidden {
+    display: none !important;
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: auto 1fr; 
+    width: 100vw;
+    height: 100vh;
+}
+
+//side menu logic
+.side-menu {
+    background-color: $primary-blue; 
+    color: $white;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    width: 60px; 
+    overflow: hidden; 
+    white-space: nowrap; 
+    transition: width $transition-normal ease; 
+    z-index: 10;
+
+    &:hover {
+        width: 250px; 
+        padding: 20px;
+    }
+
+    .menu-title {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 16px;
+        margin: 0;
+        padding-bottom: 10px;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        list-style: none;
+        transition: background $transition-normal;
+        min-width: 200px;
+        
+        &:hover {
+            background-color: rgb($white, 0.2);
+        }
+
+        &.active {
+            font-weight: bold;
+        }
+    }
+}
+
+//main content and search 
+.main-content {
+    overflow-y: auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+
+    .title-class {
+        font-family: 'Arial Black', sans-serif;
+        color: $secondary-blue;
+        text-align: center;
+        font-size: clamp(30px, 8vw, 50px);
+        text-shadow: $white 4px 4px 4px;
+    }
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: $white;
+    border: 1px solid #ccc;
+    border-radius: 35px; 
+    padding: 5px 15px; 
+    width: 90%; 
+    max-width: 500px; 
+    margin-bottom: 20px;
+    
+    .input-class {
+        flex-grow: 1; 
+        font-size: 16px; 
+        border: none;
+        outline: none;
+    }
+}
+
+.search-button {
+    background-color: $accent-blue;
+    color: $white;
+    //font-family: 'Arial', sans-serif;
+    border: 1px solid $accent-blue-hover;
+    border-radius: 30px;
+    font-size: 16px;
+    padding: 15px 30px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover {
+        background-color: $accent-blue-hover
+    }
+}
+
+//sub-navigation on main page between favorites and history
+.nav-container {
+    display: flex;
+    //flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    width: 90%;
+    flex-wrap: nowrap; 
+    //flex-shrink: 0;
+}
+
+.favorites-button, .history-button {
+    @include nav-pill-button;
+}
+
+.history-button {
+    margin-left: 10px;
+}
+
+
+.history-info {
+    display: flex !important; 
+    //flex-direction: row;     
+    flex-wrap: wrap;       
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+.history-bubble {
+    background-color: rgba($white, 0.687);
+    border: 1px solid $primary-blue;
+    border-radius: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    //font-family: Arial, sans-serif;
+    //font-size: 14px;
+    transition: all $transition-fast;
+
+    &:hover {
+        background-color: $primary-blue;
+        color: $white;
+        transform: translateY(-5px);
+    }
+}
+
+
+//country info cards and rankings
+.country-info { 
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+    //flex-grow: 1;
+    //overflow-y: auto;
+}
+
+.country-info-text {
+    text-align: center;
+    //font-family: 'Arial', sans-serif;
+    font-size: 20px;
+    color: black;
+    margin-top: 5px;
+}
+
+.rankings-container {
+    width: 100%;            
+    max-width: 1200px;   
+    //margin: 0 auto;
+    background: rgba($white, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    @include flex-center;
+    flex-direction: column;
+}
+
+#rankings-list-container {
+    width: 100%;             
+    //min-height: 400px;    
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    padding: 20px 0;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow-y: auto; 
+    
+    .country-info-text {
+        color: $primary-blue;
+        font-weight: bold;
+        font-size: 22px;
+        margin-top: 50px;
+        //letter-spacing: 1px;
+    }
+}
+
+//individual rows and cards
+.ranking-row {
+    display: grid;
+    grid-template-columns: 40px 60px 1fr 80px;
+    align-items: center;
+    gap: 15px;
+    background-color: rgba($white, 0.85);
+    margin-bottom: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    width: 95%;
+    max-width: 800px;
+
+    .rank-flag {
+        width: 70px;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .rank-details {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .rank-info {
+        font-size: 12px;
+        color: #444;
+    }
+
+    .rank-number {
+        //font-size: 16px;
+        font-weight: bold;
+        color: #222;
+    }
+
+    .rank-map-link {
+        text-decoration: none;
+        font-size: 14px;
+        color: $secondary-blue;
+        font-weight: bold;
+    }
+}
+
+.show-border {
+    border: 1px solid rgb(144, 144, 144);
+    border-radius: 10px;
+    background-color: rgba($white, 0.8);
+    width: 90%; 
+    max-width: 800px;
+    padding: 12px 20px; 
+    max-height: 150px;
+    display: flex;
+    //flex-direction: row; 
+    align-items: center;
+    box-shadow: $shadow-light;
+
+    .image-flag {
+        border-radius: 10px;
+        width: 150px;
+        height: auto;
+    }
+
+    .info-column {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 20px; 
+        flex: 1;
+    }
+}
+
+//discovery / vacation card
+.discovery-header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    .discovery-subtitle {
+        //font-family: Arial, sans-serif;
+        color: $text-gray;
+        margin-bottom: 15px;
+    }
+}
+
+.vacation-card {
+    background: $white;
+    //font-family: 'Arial', sans-serif;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-top: 10px solid $discovery-blue; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .travel-guide-section {
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+    }
+
+    .wiki-link-btn {
+        background-color: $discovery-blue;
+        color: $white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 14px;
+        //font-family: 'Arial';
+    }
+}
+
+//interactive elements/buttons
+.star-button {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-left: auto;
+    transition: transform $transition-fast;
+
+    &:hover { 
+        transform: scale(1.2); 
+    }
+}
+
+//media queries for mobile view
+@media (max-width: 600px) {
+    .app-container { 
+        grid-template-columns: 1fr; 
+    }
+
+    .side-menu {
+        flex-direction: row;
+        width: 100%;
+        overflow-x: auto;
+        height: auto;
+    }
+
+    .show-border {
+        flex-direction: column; 
+        text-align: center;
+        max-height: none;
+
+        .info-column {
+            margin-left: 0; 
+            margin-top: 15px;
+            align-items: center;
+        }
+
+        .star-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+
+    .ranking-row {
+        grid-template-columns: 1fr 1fr;
+        text-align: center;
+    }
+}

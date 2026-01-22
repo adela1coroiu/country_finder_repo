@@ -41,6 +41,7 @@ body {
 .side-menu:hover {
   width: 250px;
   padding: 20px;
+  align-items: flex-start;
 }
 .side-menu .menu-title {
   font-family: "Arial Black", sans-serif;
@@ -51,6 +52,7 @@ body {
 .side-menu .menu-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 15px;
   padding: 12px;
   border-radius: 8px;
@@ -116,10 +118,12 @@ body {
 
 .nav-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   gap: 10px;
   width: 90%;
   flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .favorites-button, .history-button {
@@ -146,6 +150,7 @@ body {
 
 .history-info {
   display: flex !important;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 15px;
@@ -175,6 +180,8 @@ body {
   gap: 10px;
   padding: 10px;
   width: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .country-info-text {
@@ -187,6 +194,7 @@ body {
 .rankings-container {
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   padding: 20px;
@@ -260,6 +268,7 @@ body {
   padding: 12px 20px;
   max-height: 150px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

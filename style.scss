@@ -71,6 +71,7 @@ body {
     &:hover {
         width: 250px; 
         padding: 20px;
+        align-items: flex-start;
     }
 
     .menu-title {
@@ -83,6 +84,7 @@ body {
     .menu-item {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 15px;
         padding: 12px;
         border-radius: 8px;
@@ -157,12 +159,12 @@ body {
 //sub-navigation on main page between favorites and history
 .nav-container {
     display: flex;
-    //flex-direction: row;
+    flex-direction: row;
     justify-content: center;
     gap: 10px;
     width: 90%;
     flex-wrap: nowrap; 
-    //flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 .favorites-button, .history-button {
@@ -176,7 +178,7 @@ body {
 
 .history-info {
     display: flex !important; 
-    //flex-direction: row;     
+    flex-direction: row;     
     flex-wrap: wrap;       
     gap: 10px;
     margin-top: 15px;
@@ -211,8 +213,8 @@ body {
     gap: 10px;
     padding: 10px;
     width: 100%;
-    //flex-grow: 1;
-    //overflow-y: auto;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .country-info-text {
@@ -226,7 +228,7 @@ body {
 .rankings-container {
     width: 100%;            
     max-width: 1200px;   
-    //margin: 0 auto;
+    margin: 0 auto;
     background: rgba($white, 0.9);
     border-radius: 15px;
     padding: 20px;
@@ -308,7 +310,7 @@ body {
     padding: 12px 20px; 
     max-height: 150px;
     display: flex;
-    //flex-direction: row; 
+    flex-direction: row; 
     align-items: center;
     box-shadow: $shadow-light;
 
